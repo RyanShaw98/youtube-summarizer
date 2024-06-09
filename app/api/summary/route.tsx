@@ -54,7 +54,7 @@ async function summarizeCapitions(captions: string): Promise<string> {
     }
     );
 
-    return response.choices[0].message.content?.trim();
+    return response.choices[0]?.message?.content?.trim() ?? '';
   } catch (error) {
     console.error('Error summarizing captions:', error);
     throw new Error('Failed to summarize captions');
