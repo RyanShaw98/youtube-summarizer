@@ -40,7 +40,7 @@ export default function Home() {
         <div className="text-center space-y-3">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-black dark:text-white">Summarize YouTube Videos</h1>
           <p className="text-gray-500 md:text-xl dark:text-gray-400">
-            Enter a YouTube video URL and we'll provide a summary in seconds.
+            Enter a YouTube video URL and we&apos;ll provide a summary in seconds.
           </p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 space-y-4">
