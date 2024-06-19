@@ -13,8 +13,17 @@ function isYouTubeUrlValid(url: string) {
   return p.test(url);
 }
 
+function getYouTubeVideoID(url: string): string | null {
+  const regex = /(?:youtube\.com\/.*v=|youtu\.be\/)([^&#]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+}
+
 export default function Home() {
   const [videoUrl, setVideoUrl] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [length, setLength] = useState<string>('');
+  const [channel, setChannel] = useState<string>('');
   const [summary, setSummary] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -23,6 +32,9 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.post('/api/summary', { videoUrl });
+      setTitle(response.data.title);
+      setLength(response.data.length);
+      setChannel(response.data.channel);
       setSummary(response.data.summary);
     } catch (error) {
       console.error("Error fetching summary:", error);
@@ -47,12 +59,27 @@ export default function Home() {
           <div className="flex items-center space-x-2">
             <form onSubmit={handleSubmit} className="flex w-full space-x-2">
               <Input type="text" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Enter YouTube video URL" />
-              <Button type="submit" disabled={!isUrlValid || loading}>{loading ? <TailSpin height={32} width={32} stroke='#000000' fill='#000000' /> : "Summarize"}</Button>
+              <Button type="submit" disabled={!isUrlValid || loading}>{loading ? <TailSpin height={24} width={24} stroke='#000000' fill='#000000' /> : "Summarize"}</Button>
             </form>
           </div>
           {summary && (
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
-              <p className="text-gray-500 dark:text-gray-400">{summary}</p>
+            <div>
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 mb-4">
+                <p className="text-2xl font-bold tracking-tighter sm:text-xl md:text-2xl text-black dark:text-white">{title}</p><br/>
+                <iframe
+                  // width="560"
+                  // height="315"
+                  src={`https://www.youtube.com/embed/${getYouTubeVideoID(videoUrl)}`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full aspect-video"
+                  ></iframe>
+                  <p className="text-gray-500 dark:text-gray-400"><br/>Channel: {channel}<br/><br/>Length: {length}</p>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+                <p className="text-2xl font-bold tracking-tighter sm:text-xl md:text-2xl text-black dark:text-white">Summary</p><br/>
+                <p className="text-gray-500 dark:text-gray-400 whitespace-pre-line">{summary}</p>
+              </div>
             </div>)}
         </div>
       </div>
