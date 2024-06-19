@@ -17,12 +17,12 @@ function convertSecondsToTimeString(seconds_input: number): string {
   const timeParts: string[] = [];
 
   if (hours > 0) {
-    timeParts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+    timeParts.push(`${hours} hour${hours != 1 ? 's' : ''}`);
   }
   if (minutes > 0 || hours > 0) {
-    timeParts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+    timeParts.push(`${minutes} minute${minutes != 1 ? 's' : ''}`);
   }
-  timeParts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+  timeParts.push(`${seconds} second${seconds != 1 ? 's' : ''}`);
 
   return timeParts.join(' ');
 }
